@@ -19,8 +19,8 @@ CREATE TABLE Request (
 
 CREATE TABLE Website (
     id int NOT NULL AUTO_INCREMENT,
-    -- evaluation_id int NOT NULL,
-    evaluation_id int,
+    evaluation_id int NOT NULL,
+    -- evaluation_id int,
     request_id int NOT NULL,
     url text,
     createdAt timestamp DEFAULT CURRENT_TIMESTAMP,

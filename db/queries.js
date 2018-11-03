@@ -7,8 +7,9 @@ const config = {
     password: 'senha',
     database: 'URL_IDENTIFIER',
     // port: 3000
-    // database: process.env.BOT_DB
 }
+
+var Promise = require('bluebird');
 
 class Database {
     constructor( config ) {
@@ -37,58 +38,44 @@ class Database {
 
 db = new Database(config);
 
-// connection = mysql.createConnection(config); 
-
-// const connect = () => { 
-//     connection.connect((err) => {             
-//         if (err) {                                    
-//             console.log('error when connecting to db:', err);
-//             setTimeout(connect, 2000); 
-//         } 
-//         console.log('DB connected');
-//     });
-// 
-//     connection.on('error', (err) => { 
-//         console.log('db error', err);
-//         if (err.code === 'PROTOCOL_CONNECTION_LOST') { 
-//             console.log('reconnecting DB');
-//             connectDB();
-//         }
-//         else {
-//             throw err;
-//         }
-//     });
-// };
-
-
-
-// const end = () => {
-//     connection.end((err) => {
-//         console.log("ending DB connection");
-//         if (err) throw err;
-//     });
-//     console.log('DB disconnected');
-// };
-
-function insertNewWebsite(url, status) {
-    return db.query(
+// Verdict 1, 2, 3: Legal, Ilegal, -
+// Status 1, 2, 3: Aguardando processamento, Processado, Respondido
+function insertNewWebsite(url, status, verdict, reason) {
+    var req = db.query(
         "INSERT INTO Request(current_status) VALUES (?)",
-        [status]
-    ).then( (results) => {
-        reqId = results.insertId || results[0].id;
-        console.log ("Inserted website: " + url);
+        [status]);
+    var evl = req.then( () => {
         return db.query(
-            "INSERT INTO Website(url, evaluation_id, request_id)\
+        "INSERT INTO Evaluation(verdict, reason) VALUES (?, ?)",
+        [verdict, reason])
+    });
+    return evl.then( () => {
+        // console.log("Insert website: " + url);
+        return db.query(
+        "INSERT INTO Website(url, evaluation_id, request_id)\
             VALUES (?, ?, ?)",
-            [url, null, reqId],
-        ) 
-    })
+        [url, evl.value().insertId, req.value().insertId])
+    }); 
+}
+
+function updateWebsiteVerdict(id, verdict, reason) {
+    console.log("Called to Website with id: " + id);
+    return db.query(
+        "SELECT evaluation_id FROM Website WHERE id = ?",
+        [id]
+    ).then( (res) => {
+        evalId = res[0].evaluation_id;
+        // console.log("Updating Evaluation id: " + evalId);
+        return db.query(
+            "UPDATE Evaluation SET verdict = ?, reason = ? WHERE id = ?",
+            [verdict, reason, evalId]
+        );
+    }) 
+
 }
 
 module.exports = {
     Database,
-    // connection,
-    // connect,
-    // end,
-    insertNewWebsite
+    insertNewWebsite,
+    updateWebsiteVerdict
 }

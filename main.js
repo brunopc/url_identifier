@@ -10,7 +10,7 @@ const app = express();
 const port = 3000;
 
 // db.connect();
-db.insertNewWebsite("url.com", 1);
+db.insertNewWebsite("url.com", 1, 2, "Anything");
 
 
 app.use(bodyParser.urlencoded({
