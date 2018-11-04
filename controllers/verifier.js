@@ -29,9 +29,8 @@ function siteHash(site, verdict, reason) {
 async function verifier(requestBody) {
     const sites = JSON.parse(requestBody['sites']);
 
-    answerAux = sites.map((site, index) => {
+    answerAux = sites.map((site) => {
         console.log('scrapping: ', site);
-        var siteAnswer = {}
         return rp(site).then(async (err, res, body) => {
             response = await handleSite(null, site, body);
             return siteHash(site, response[0], response[1]);
@@ -42,8 +41,11 @@ async function verifier(requestBody) {
         });
     });
 
+
     var hash = {};
     hash["sites"] = await Promise.all(answerAux);
+
+    db.setCompleteAllSites(sites);
 
     return hash;
 }
@@ -53,6 +55,7 @@ function timeOut(ms) {
 }
 
 async function evaluateLegality(body) {
+    await timeOut(10000);
     return [2, "Absolute illegal", "Everything is illegal. \
             Down with the internet!"];
 }

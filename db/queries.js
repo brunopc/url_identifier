@@ -78,13 +78,26 @@ function updateWebsiteRequest(id, status) {
         "SELECT request_id FROM Website WHERE id = ?",
         [id]
     ).then( (res) => {
-        reqId = res[0].request_id;
-        // console.log("Updating Request id: " + reqId);
-        return db.query(
-            "UPDATE Request SET current_status = ? WHERE id = ?",
-            [status, reqId]
-        );
+        return setRequestStatus(res[0].request_id, status);
     }) 
+}
+
+function setRequestStatus(id, status) {
+    return db.query(
+        "UPDATE Request SET current_status = ? WHERE id = ?",
+        [status, id]
+    );
+}
+
+function setCompleteAllSites(sites) {
+    sites.map((site) => {
+        return db.query(
+            "SELECT request_id FROM Website WHERE url = ?",
+            [site]
+        ).then( (res) => {
+            return setRequestStatus(res[0].request_id, 3);
+        });
+    })
 }
 
 module.exports = {
@@ -92,4 +105,5 @@ module.exports = {
     insertNewWebsite,
     updateWebsiteVerdict,
     updateWebsiteRequest,
+    setCompleteAllSites
 }
