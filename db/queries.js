@@ -59,7 +59,7 @@ function insertNewWebsite(url, status, verdict, reason) {
 }
 
 function updateWebsiteVerdict(id, verdict, reason) {
-    console.log("Called to Website with id: " + id);
+    // console.log("Called to Website with id: " + id);
     return db.query(
         "SELECT evaluation_id FROM Website WHERE id = ?",
         [id]
@@ -71,11 +71,25 @@ function updateWebsiteVerdict(id, verdict, reason) {
             [verdict, reason, evalId]
         );
     }) 
+}
 
+function updateWebsiteRequest(id, status) {
+    return db.query(
+        "SELECT request_id FROM Website WHERE id = ?",
+        [id]
+    ).then( (res) => {
+        reqId = res[0].request_id;
+        // console.log("Updating Request id: " + reqId);
+        return db.query(
+            "UPDATE Request SET current_status = ? WHERE id = ?",
+            [status, reqId]
+        );
+    }) 
 }
 
 module.exports = {
     Database,
     insertNewWebsite,
-    updateWebsiteVerdict
+    updateWebsiteVerdict,
+    updateWebsiteRequest,
 }
