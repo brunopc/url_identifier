@@ -50,7 +50,6 @@ function insertNewWebsite(url, status, verdict, reason) {
         [verdict, reason])
     });
     return evl.then( () => {
-        // console.log("Insert website: " + url);
         return db.query(
         "INSERT INTO Website(url, evaluation_id, request_id)\
             VALUES (?, ?, ?)",
@@ -59,13 +58,11 @@ function insertNewWebsite(url, status, verdict, reason) {
 }
 
 function updateWebsiteVerdict(id, verdict, reason) {
-    // console.log("Called to Website with id: " + id);
     return db.query(
         "SELECT evaluation_id FROM Website WHERE id = ?",
         [id]
     ).then( (res) => {
         evalId = res[0].evaluation_id;
-        // console.log("Updating Evaluation id: " + evalId);
         return db.query(
             "UPDATE Evaluation SET verdict = ?, reason = ? WHERE id = ?",
             [verdict, reason, evalId]
