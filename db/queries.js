@@ -54,7 +54,7 @@ function insertNewWebsite(url, status, verdict, reason) {
         "INSERT INTO Website(url, evaluation_id, request_id)\
             VALUES (?, ?, ?)",
         [url, evl.value().insertId, req.value().insertId])
-    }); 
+    });
 }
 
 function updateWebsiteVerdict(id, verdict, reason) {
@@ -67,7 +67,7 @@ function updateWebsiteVerdict(id, verdict, reason) {
             "UPDATE Evaluation SET verdict = ?, reason = ? WHERE id = ?",
             [verdict, reason, evalId]
         );
-    }) 
+    })
 }
 
 function updateWebsiteRequest(id, status) {
@@ -76,8 +76,22 @@ function updateWebsiteRequest(id, status) {
         [id]
     ).then( (res) => {
         return setRequestStatus(res[0].request_id, status);
-    }) 
+    })
 }
+
+// describe('', () => {
+//   it("asdfasd", () => {
+//     const query = jest.fn(() => ('bla'));
+//     const db = {
+//       query,
+//     }
+// 
+//     const res = setRequestStatus(db, 23, 'amor');
+// 
+//     expect(db.query).toHaveBeenCalled();
+//     expect(res).toBe('bla');
+//   })
+// })
 
 function setRequestStatus(id, status) {
     return db.query(

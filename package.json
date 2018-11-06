@@ -1,0 +1,44 @@
+{
+  "name": "package.json",
+  "version": "1.0.0",
+  "description": "Standard package.json",
+  "main": "main.js",
+  "dependencies": {
+    "bluebird": "^3.5.2",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "mysql": "^2.16.0",
+    "nodemon": "^1.18.4",
+    "promise-mysql": "^3.3.1",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.8.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "jest": "^23.6.0"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint",
+    "coverage": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://brunopc@bitbucket.org/brunopc/url_identifier.git"
+  },
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "branches": 0,
+        "functions": 0,
+        "lines": 0,
+        "statements": 0
+      }
+    }
+  },
+  "author": "bpc",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/brunopc/url_identifier#readme"
+}
