@@ -1,15 +1,15 @@
-const db = require('../db/queries')
+const queries = require('../db/queries')
 const regexEvaluation = require('./regexEvaluation');
 
-async function handleSite(err, site, body) {
-    siteDb = await db.insertNewWebsite(site, 1, 3, "Aguardando\
+async function handleSite(db, err, site, body) {
+    siteDb = await queries.insertNewWebsite(db, site, 1, 3, "Aguardando\
         processamento");
     if (err) 
         [verdict, reason] = [1, "Erro ao acessar site"];
     else
         [verdict, reason] = regexEvaluation(body);
-    db.updateWebsiteRequest(siteDb.insertId, 1);
-    db.updateWebsiteVerdict(siteDb.insertId, verdict, reason);
+    queries.updateWebsiteRequest(db, siteDb.insertId, 1);
+    queries.updateWebsiteVerdict(db, siteDb.insertId, verdict, reason);
     console.log("finished response " + site);
     return [verdict, reason]
 }

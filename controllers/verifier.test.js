@@ -11,12 +11,6 @@ const rp = require('request-promise');
 
 beforeEach(() => {
     jest.clearAllMocks();
-    // db.insertNewWebsite.mockImplementation(() => ({
-    //     insertId: 12,
-    // }));
-    // regexEvaluation.mockImplementation(() => {
-    //     return [null, null];
-    // });
     rp.mockImplementation(async () => {
         return 1;
     })

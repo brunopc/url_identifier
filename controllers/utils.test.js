@@ -3,12 +3,12 @@ const utils = require('./utils');
 jest.mock('../db/queries');
 jest.mock('./regexEvaluation');
 
-const db = require('../db/queries');
+const queries = require('../db/queries');
 const regexEvaluation = require('./regexEvaluation');
 
 beforeEach(() => {
     jest.clearAllMocks();
-    db.insertNewWebsite.mockImplementation(() => ({
+    queries.insertNewWebsite.mockImplementation(() => ({
         insertId: 12,
     }));
     regexEvaluation.mockImplementation(() => {
@@ -38,28 +38,29 @@ describe('siteHash', () => {
 })
 
 describe('handleSite', () => {
+    var db = null;
     var site = 'http://www.google.com';
     var body = 'Empty';
-    it('should call db.updateWebSiteRequest', async () => {
-        await utils.handleSite(null, site, body);
+    it('should call queries.updateWebSiteRequest', async () => {
+        await utils.handleSite(db, null, site, body);
 
-        expect(db.updateWebsiteRequest).toHaveBeenCalledWith(12, 1);
-        expect(db.updateWebsiteRequest).toHaveBeenCalledTimes(1);
+        expect(queries.updateWebsiteRequest).toHaveBeenCalledWith(db, 12, 1);
+        expect(queries.updateWebsiteRequest).toHaveBeenCalledTimes(1);
     });
 
-    it('should call db.updateWebsiteVerdict', async () => {
-        await utils.handleSite(null, site, body);
+    it('should call queries.updateWebsiteVerdict', async () => {
+        await utils.handleSite(db, null, site, body);
 
-        expect(db.updateWebsiteVerdict).toHaveBeenCalled();
-        expect(db.updateWebsiteVerdict).toHaveBeenCalledTimes(1);
+        expect(queries.updateWebsiteVerdict).toHaveBeenCalled();
+        expect(queries.updateWebsiteVerdict).toHaveBeenCalledTimes(1);
     });
     it('should return \"Erro\" if err', async () => {
-        res = await utils.handleSite(1, site, body);
+        res = await utils.handleSite(db, 1, site, body);
 
         expect(res).toEqual([1, 'Erro ao acessar site']);
     })
     it('should call evaluateLegality if not err', async () => {
-        await utils.handleSite(null, site, body);
+        await utils.handleSite(db, null, site, body);
 
         expect(regexEvaluation).toHaveBeenCalled();
     })
