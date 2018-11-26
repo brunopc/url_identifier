@@ -2,7 +2,9 @@
 
 - github: brunopc/url_identifier.git
 * [Vídeo de explicação do código](https://www.youtube.com/watch?v=dlXqqqJI_ek)
-* [Documentação](https://www.dropbox.com/s/pfzc85yzzedi4ad/docs.pdf?dl=0)
+* Uma documentação mais detalhada pode ser encontrada em
+  `/docs/docs.md` ou em
+  [pdf](https://www.dropbox.com/s/pfzc85yzzedi4ad/docs.pdf?dl=0).
 
 O projeto busca identificar, através de expressões regulares, se um
 conjunto de sites (enviados como no enunciado) contém comércio ilegal ou
